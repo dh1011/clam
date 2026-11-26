@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>clam — Plain English at your shell prompt</title>
+<meta name="description" content="clam is an AI terminal assistant for Bash, zsh, PowerShell and Vim, in one small binary. Type a question in plain English at your prompt and get an answer; ordinary commands run as usual. File edits and commands need your approval.">
+<meta name="keywords" content="AI terminal assistant, natural language shell, bash AI, zsh AI plugin, PowerShell AI, command line agent, CLI copilot">
+<meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="clam — Plain English at your shell prompt">
+<meta property="og:description" content="Ask your terminal anything. Commands run as usual; questions go to an agent that reads your project and asks before it changes anything.">
+<meta property="og:image" content="demo.gif">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="alternate" type="text/markdown" href="llms.txt" title="LLM summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "clam",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, macOS, Windows, FreeBSD",
+  "description": "An AI assistant that answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone.",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+:root {
+  --paper: #f3efe6; --ink: #161514; --dim: #77726a; --rule: #d9d3c6; --hot: #e2470f;
+  --term: #161514; --term-ink: #e9e4d8; --term-dim: #8a857b; --ok: #9cc58a;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121212; --ink: #e9e4d8; --dim: #8a857b; --rule: #2b2a28; --hot: #ff6a2b;
+    --term: #1b1a19; --term-ink: #e9e4d8; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121212; --ink: #e9e4d8; --dim: #8a857b; --rule: #2b2a28; --hot: #ff6a2b;
+  --term: #1b1a19; --term-ink: #e9e4d8; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.7 var(--mono); font-variant-ligatures: none; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--hot); color: var(--paper); }
+a { color: inherit; text-decoration-color: var(--hot); text-underline-offset: 3px; }
+a:hover { color: var(--hot); }
+code { font: inherit; font-weight: 500; }
+b { font-weight: 700; }
+
+.page { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+.runner { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; color: var(--dim); padding: 22px 0; }
+.runner span:nth-child(2) { text-align: center; }
+
+h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; margin: 64px 0 20px; }
+h1 .hot { color: var(--hot); }
+.lede { color: var(--dim); max-width: 56ch; margin: 0 0 36px; }
+
+h2 { font-size: 16px; font-weight: 700; letter-spacing: .04em; margin: 56px 0 10px; }
+.sec { padding-left: 7ch; }
+.sec p { margin: 0 0 14px; }
+.dim { color: var(--dim); }
+
+/* terminal */
+.term { background: var(--term); color: var(--term-ink); border-radius: 6px; font-size: 14px; line-height: 1.65; padding: 20px 22px; height: 470px; overflow: hidden; white-space: pre-wrap; word-break: break-word; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
+.term > div { min-height: 1.65em; flex-shrink: 0; }
+.ps { color: var(--term-dim); }
+.ps b { color: var(--term-ink); font-weight: 500; }
+.note { color: var(--term-dim); font-style: italic; }
+.agent { padding-left: 2ch; }
+.ask { color: #ff8a52; }
+.add { color: var(--ok); } .del { color: #ef7d6d; }
+.chip { color: #ff8a52; }
+.caret { display: inline-block; width: .6em; height: 1.1em; background: #ff6a2b; vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.js .term > div.h { display: none; }
+#replay { position: absolute; top: 12px; right: 14px; background: none; border: 0; color: var(--term-dim); font: 12px var(--mono); cursor: pointer; padding: 4px; }
+#replay:hover { color: var(--term-ink); }
+
+pre.code { margin: 0 0 14px; white-space: pre; overflow-x: auto; }
+pre.code .c { color: var(--dim); }
+
+footer { margin-top: 80px; border-top: 1px solid var(--rule); }
+
+@media (max-width: 640px) {
+  .page { padding: 0 16px; }
+  .sec { padding-left: 0; }
+  .runner span:nth-child(2) { display: none; }
+  .term { font-size: 12px; height: 430px; padding: 16px; }
+  h1 { margin-top: 36px; }
+}
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="runner" aria-hidden="true"><span>CLAM(1)</span><span>General Commands Manual</span><span>CLAM(1)</span></div>
+
+  <main>
+    <h1>Your shell, now<br>fluent in English<span class="hot">_</span></h1>
+    <p class="lede">clam is an AI assistant that lives in your prompt. Commands run. Questions get answered. Nothing changes without a <code>y</code>.</p>
+
+    <div class="term" id="term" role="img" aria-label="Terminal demo: clam runs ls normally, answers a question in English, then asks permission before adding a --help option to a project">
+<div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> ls</div>
+<div>index.js  api.js  package.json</div>
+<div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> what does this project do?</div>
+<div class="note" data-pause="900">  reading index.js, api.js, package.json…</div>
+<div class="agent">A tiny weather CLI. index.js takes a city (default Lisbon)</div>
+<div class="agent">and prints a one-line forecast fetched from wttr.in.</div>
+<div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> add a help option to the cli</div>
+<div class="note" data-pause="900">clam requests write_file: index.js</div>
+<div class="add">+ if (city === '--help' || city === '-h') {</div>
+<div class="add">+   console.log('Usage: weather-cli [city]');</div>
+<div class="add">+   process.exit(0);</div>
+<div class="add">+ }</div>
+<div class="ask" data-ask>Allow this action? [y/N] y</div>
+<div class="agent" data-pause="700">Added <span class="chip">-h</span> and <span class="chip">--help</span>. They print usage and exit.</div>
+<div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> git diff --stat</div>
+<div> index.js | 12 <span class="add">++++++++++</span><span class="del">--</span></div>
+<div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> node index.js --help</div>
+<div>Usage: weather-cli [city]</div>
+<div data-end><span class="ps">[c+] <b>~/weather-cli</b> $</span> <span class="caret"></span></div>
+<button type="button" id="replay" hidden>replay ↻</button>
+    </div>
+
+    <h2>SYNOPSIS</h2>
+    <div class="sec">
+      <p><b>clam init</b> <b>bash</b> | <b>zsh</b> | <b>pwsh</b><br><b>clam</b> [<b>on</b> | <b>off</b> | <b>reset</b>]<br><b>clam auto</b> [<b>on</b> | <b>off</b>]<br><i>any sentence in plain English</i></p>
+    </div>
+
+    <h2>DESCRIPTION</h2>
+    <div class="sec">
+      <p>An AI assistant for Bash, zsh, PowerShell and Vim, shipped as one static binary for Linux, macOS, Windows and FreeBSD. Commands run as usual. Sentences go to an agent that can read your project. Anything that writes or runs asks first.</p>
+    </div>
+
+    <h2>INSTALL</h2>
+    <div class="sec">
+<pre class="code">$ curl -fsSL https://raw.githubusercontent.com/dh1011/clam/main/install.sh | sh
+$ export OPENAI_API_KEY=sk-...
+$ echo 'eval "$(clam init bash)"' &gt;&gt; ~/.bashrc</pre>
+      <p class="dim">The script picks the right binary for your OS and CPU, checks its SHA-256 checksum and installs it to <code>~/.local/bin</code>. No runtime to install. For zsh, use <code>clam init zsh</code> in <code>~/.zshrc</code>; for PowerShell, download the Windows <code>.exe</code> from the <a href="https://github.com/dh1011/clam/releases/latest">latest release</a> and add <code>clam init pwsh | Out-String | Invoke-Expression</code> to <code>$PROFILE</code>. To build from source, run <code>make</code> with Go 1.24+.</p>
+    </div>
+
+    <h2>PLATFORMS</h2>
+    <div class="sec">
+      <p><b>Shells:</b> Bash, zsh, PowerShell (with PSReadLine), Vim and Neovim.<br><b>Systems:</b> Linux (amd64, arm64, armv7, 386), macOS (Intel, Apple silicon), Windows (amd64, arm64), FreeBSD (amd64, arm64).<br><b>Agents:</b> built-in (OpenAI-compatible), Codex, Claude Code, OpenCode, pi, or any command.</p>
+    </div>
+
+    <h2>HOW IT WORKS</h2>
+    <div class="sec">
+<pre class="code" role="img" aria-label="A line typed at the prompt goes through the shell hook. Commands run as usual. English goes to the agent, which reads files freely and asks before writing files or running commands.">  you press Enter
+        |
+   shell hook ---- starts with a command -----&gt; runs as usual
+        |                                              ^
+   clam check ---- not English ------------------------'
+        |
+     English
+        |
+      agent ------ read / list / search files --&gt; answer
+        |
+   write or run? -- Allow? [y/N] -- y --&gt; action runs</pre>
+      <p class="dim">The check runs locally and gives up after a second, so the prompt never waits on the network. Only English reaches the agent.</p>
+    </div>
+  </main>
+
+  <footer class="runner"><span>clam</span><span>MIT</span><span>CLAM(1)</span></footer>
+</div>
+
+<script>
+(() => {
+  const term = document.getElementById('term');
+  const replay = document.getElementById('replay');
+  const lines = [...term.querySelectorAll(':scope > div')];
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('js');
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  let run = 0;
+
+  async function play() {
+    const id = ++run;
+    replay.hidden = true;
+    lines.forEach(l => l.classList.add('h'));
+    await sleep(500);
+    for (const l of lines) {
+      if (id !== run) return;
+      if (l.dataset.pause) await sleep(+l.dataset.pause);
+      if ('cmd' in l.dataset) {
+        const ps = l.querySelector('.ps');
+        const text = l.textContent.slice(ps.textContent.length);
+        const html = l.innerHTML;
+        const typed = document.createTextNode('');
+        const caret = Object.assign(document.createElement('span'), { className: 'caret' });
+        l.replaceChildren(ps, typed, caret);
+        l.classList.remove('h');
+        await sleep(450);
+        for (const ch of text) { if (id !== run) return; typed.textContent += ch; await sleep(35 + Math.random() * 55); }
+        await sleep(350);
+        l.innerHTML = html;
+        await sleep(250);
+      } else if ('ask' in l.dataset) {
+        const html = l.innerHTML;
+        l.textContent = 'Allow this action? [y/N] ';
+        l.classList.remove('h');
+        await sleep(1100);
+        l.innerHTML = html;
+        await sleep(400);
+      } else {
+        l.classList.remove('h');
+        await sleep(l.classList.contains('agent') ? 220 : 120);
+      }
+    }
+    replay.hidden = false;
+  }
+
+  replay.addEventListener('click', play);
+  new IntersectionObserver((es, o) => {
+    if (es[0].isIntersecting) { o.disconnect(); play(); }
+  }, { threshold: 0.3 }).observe(term);
+})();
+</script>
+</body>
+</html>

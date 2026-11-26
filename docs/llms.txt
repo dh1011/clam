@@ -1,0 +1,43 @@
+# clam
+
+> clam answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone. It uses an agent that can inspect local files and, with the user's approval, change files or run commands. It ships as one static binary for Linux, macOS, Windows and FreeBSD.
+
+## How it works
+
+- A line that reads as English (for example "what does this project do?") goes to the agent. Anything else, including lines that start with a real command, runs as a normal shell command.
+- The agent can read, list and search files in the directory where the request was entered.
+- Writing a file or running a command outside a small inspection allowlist shows the action and needs `y` or `yes`. Without an interactive terminal, the action is denied.
+- `clam auto on` skips approval prompts in the current terminal. The write tool stays confined to the current directory tree.
+- Conversation history is stored in `~/.cache/clam/sessions` with user-only permissions and expires after a day.
+
+## Requirements
+
+- An OpenAI API key, or any server with an OpenAI-compatible Responses API (`OPENAI_BASE_URL`)
+- Go 1.24+ to build from source; the binary itself needs nothing else
+
+## Install
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/dh1011/clam/main/install.sh | sh
+export OPENAI_API_KEY=...
+```
+
+The script downloads the release binary for the current OS and CPU, verifies its SHA-256 checksum and installs it to `~/.local/bin`. On Windows, download the `.exe` from https://github.com/dh1011/clam/releases/latest. To build from source, run `make` (Go 1.24+).
+
+Then add one line to your shell's startup file: `eval "$(clam init bash)"` in `~/.bashrc`, `eval "$(clam init zsh)"` in `~/.zshrc`, or `clam init pwsh | Out-String | Invoke-Expression` in the PowerShell `$PROFILE`. Vim and Neovim can load `plugin/clam.vim`, which handles `:!` requests through `clam shell`.
+
+## Commands
+
+- `clam on` / `clam off`: toggle interception. The prompt shows `[c+]` / `[c-]`, or 🐚 / 💤 in emoji-capable terminals.
+- `clam auto on` / `clam auto off`: toggle auto-approve, shown as `[c!]` or 🔥. `CLAM_AUTO_APPROVE=1` makes it the default.
+- `clam reset`: clear conversation history for this terminal or editor session.
+- `CLAM_EMOJI=1` or `CLAM_EMOJI=0`: force emoji prompt markers on or off.
+- `CLAM_MODEL`: use a model other than the default `gpt-6-luna`.
+- `clam agent codex|claude|opencode|pi|builtin`: hand requests to another coding agent in this terminal (or set `CLAM_AGENT`). The agent runs under its own permission settings and keeps its own session per terminal. `clam agent` lists them.
+- `CLAM_AGENT_CMD='my-agent --flag'`: use any other command as the agent; it gets the request as its last argument and its output is shown as the answer.
+
+## Optional
+
+- [Demo recording](demo.gif): clam answering a question and adding a `--help` option to a sample project, recorded with VHS.
+
+License: MIT.
