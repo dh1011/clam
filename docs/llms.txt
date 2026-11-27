@@ -41,10 +41,10 @@ Then add one line to your shell's startup file: `eval "$(clam init bash)"` in `~
 - [Source code](https://github.com/dh1011/clam): Go source, README and install script.
 - [Latest release](https://github.com/dh1011/clam/releases/latest): prebuilt binaries for every platform, with SHA256SUMS.
 - [Install script](https://raw.githubusercontent.com/dh1011/clam/main/install.sh): detects the OS and CPU, verifies the checksum and installs to ~/.local/bin.
-- [Website](https://dh1011.github.io/clam/): overview, install and how it works.
+- [Website](https://duy.run/clam): overview, install and how it works.
 
 ## Optional
 
-- [Demo recording](https://dh1011.github.io/clam/demo.gif): clam answering a question and adding a `--help` option to a sample project, recorded with VHS.
+- [Demo recording](https://duy.run/clam/demo.gif): clam answering a question and adding a `--help` option to a sample project, recorded with VHS.
 
 License: MIT.

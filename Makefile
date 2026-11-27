@@ -30,7 +30,24 @@ dist:
 		{ command -v sha256sum >/dev/null && sha256sum clam-* || shasum -a 256 clam-*; } > SHA256SUMS
 	@echo dist/SHA256SUMS
 
-clean:
-	rm -rf bin dist
+# Stage the website for Vercel. It is served under /clam so that duy.run/clam
+# can proxy to it with the same paths; docs/vercel.json sits at the root.
+VERCEL_PROJECT_ID ?= prj_06MB4C7Svb58oxsFSXWIerzsYV10
+VERCEL_ORG_ID ?= team_0Tu1XobSVZ3i8Ur6OVJQEI8Z
+SITE_FILES := index.html llms.txt logo.svg social.png demo.gif
 
-.PHONY: test dist clean
+site: $(addprefix docs/,$(SITE_FILES)) docs/vercel.json
+	rm -rf site && mkdir -p site/clam
+	cp docs/vercel.json site/
+	cp $(addprefix docs/,$(SITE_FILES)) site/clam/
+
+# Deploy the staged site to the Vercel project "clam" (needs VERCEL_TOKEN).
+deploy-site: site
+	mkdir -p site/.vercel
+	printf '{"projectId":"%s","orgId":"%s"}' "$(VERCEL_PROJECT_ID)" "$(VERCEL_ORG_ID)" > site/.vercel/project.json
+	cd site && npx -y vercel@latest deploy --prod --yes --token "$$VERCEL_TOKEN"
+
+clean:
+	rm -rf bin dist site
+
+.PHONY: test dist site deploy-site clean
