@@ -2,7 +2,7 @@
 
 # clam
 
-clam answers natural-language requests typed at a shell prompt while leaving ordinary commands alone. It can inspect local files and, with approval, change files or run commands.
+clam is an AI assistant for your terminal. It answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone. It can inspect local files and, with approval, change files or run commands. Website: [dh1011.github.io/clam](https://dh1011.github.io/clam/)
 
 ![clam answering questions and editing a project from a Bash prompt](docs/demo.gif)
 
