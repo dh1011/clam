@@ -1,10 +1,29 @@
-<img src="docs/logo.svg" alt="clam logo: a pixel-art clam shell with a cursor in its mouth" width="112">
+<p align="center">
+  <img src="docs/logo.svg" alt="clam logo: a pixel-art clam shell with a cursor in its mouth" width="112">
+</p>
 
-# clam
+<h1 align="center">clam</h1>
 
-clam lets you call an LLM or coding agent straight from your Bash, zsh or PowerShell prompt, without getting in the way of regular shell commands. Type a request and it goes to the agent; type a command and it runs exactly as before. The agent can inspect local files and, with approval, change files or run commands. Website: [duy.run/clam](https://duy.run/clam)
+<p align="center">
+  <b>Call an AI agent right from your shell.</b><br>
+  Ask your LLM or coding agent at the same prompt where you run commands. Your commands run exactly as before.
+</p>
+
+<p align="center">
+  <a href="https://duy.run/clam"><b>Website</b></a> ·
+  <a href="#install">Install</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#other-agents">Other agents</a> ·
+  <a href="https://github.com/dh1011/clam/releases/latest">Releases</a>
+</p>
 
 ![clam answering questions and editing a project from a Bash prompt](docs/demo.gif)
+
+- **No mode to switch into.** Type a request at your Bash, zsh or PowerShell prompt and the answer appears in your terminal. There's no separate chat window.
+- **Your shell stays yours.** Commands never reach the agent. clam decides locally whether a line is a request, without a network call, so the prompt never waits.
+- **Use the agent you already have.** Use the built-in agent with any OpenAI-compatible API, or Codex, Claude Code, OpenCode, pi, or any command.
+- **Nothing changes without a `y`.** The agent reads your project freely, but it asks before it writes a file or runs a command.
+- **One static binary.** It runs on Linux, macOS, Windows and FreeBSD, with nothing else to install.
 
 ## Install
 
@@ -16,7 +35,7 @@ curl -fsSL https://raw.githubusercontent.com/dh1011/clam/main/install.sh | sh
 
 The script downloads the binary for your OS and CPU from the [latest release](https://github.com/dh1011/clam/releases/latest), checks its SHA-256 checksum, and installs it to `~/.local/bin`. Set `CLAM_INSTALL_DIR` to put it elsewhere, or `CLAM_VERSION=v0.1.0` to pin a release. On Windows, download `clam-windows-amd64.exe` (or `-arm64`) from the release, rename it to `clam.exe`, and put it on your `PATH`.
 
-clam is a single static binary with nothing else to install. The built-in agent needs an OpenAI API key:
+The built-in agent needs an OpenAI API key (skip this if you use another agent):
 
 ```sh
 export OPENAI_API_KEY=...
