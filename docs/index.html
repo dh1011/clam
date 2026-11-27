@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>clam — Plain English at your shell prompt</title>
-<meta name="description" content="clam is an AI terminal assistant for Bash, zsh, PowerShell and Vim, in one small binary. Type a question in plain English at your prompt and get an answer; ordinary commands run as usual. File edits and commands need your approval.">
-<meta name="keywords" content="AI terminal assistant, natural language shell, bash AI, zsh AI plugin, PowerShell AI, command line agent, CLI copilot">
+<title>clam — Your AI agent, right at the shell prompt</title>
+<meta name="description" content="clam lets you call an LLM or coding agent straight from your Bash, zsh or PowerShell prompt. Type a request and the agent handles it; type a command and your shell runs it exactly as before. One static binary; file edits and commands need your approval.">
+<meta name="keywords" content="AI agent in the terminal, LLM from the shell, coding agent CLI, bash AI, zsh AI plugin, PowerShell AI, Codex, Claude Code, OpenCode">
 <meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
-<meta property="og:title" content="clam — Plain English at your shell prompt">
-<meta property="og:description" content="Ask your terminal anything. Commands run as usual; questions go to an agent that reads your project and asks before it changes anything.">
+<meta property="og:title" content="clam — Your AI agent, right at the shell prompt">
+<meta property="og:description" content="Call an AI agent straight from your shell. Requests go to the agent; regular commands run untouched. Nothing changes without your approval.">
 <meta property="og:url" content="https://duy.run/clam">
 <meta property="og:image" content="https://duy.run/clam/social.png">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
-<meta property="og:image:alt" content="clam logo and the words: Plain English at your shell prompt">
+<meta property="og:image:alt" content="clam logo and the words: Your AI agent, right at the shell prompt">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://duy.run/clam/social.png">
 <link rel="canonical" href="https://duy.run/clam">
@@ -31,7 +31,7 @@
   "name": "clam",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Linux, macOS, Windows, FreeBSD",
-  "description": "An AI assistant that answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone.",
+  "description": "Call an LLM or coding agent straight from a Bash, zsh or PowerShell prompt, without getting in the way of regular shell commands.",
   "license": "https://opensource.org/licenses/MIT",
   "url": "https://duy.run/clam",
   "image": "https://duy.run/clam/social.png",
@@ -116,10 +116,10 @@ footer { margin-top: 80px; border-top: 1px solid var(--rule); }
   <div class="runner" aria-hidden="true"><span>CLAM(1)</span><span>General Commands Manual</span><span>CLAM(1)</span></div>
 
   <main>
-    <h1>Your shell, now<br>fluent in English<span class="hot">_</span></h1>
-    <p class="lede">clam is an AI assistant that lives in your prompt. Commands run. Questions get answered. Nothing changes without a <code>y</code>.</p>
+    <h1>Your AI agent,<br>right at the prompt<span class="hot">_</span></h1>
+    <p class="lede">Call an LLM or coding agent straight from your shell. Type a request and clam hands it to the agent. Type a command and your shell runs it, untouched. Nothing changes without a <code>y</code>.</p>
 
-    <div class="term" id="term" role="img" aria-label="Terminal demo: clam runs ls normally, answers a question in English, then asks permission before adding a --help option to a project">
+    <div class="term" id="term" role="img" aria-label="Terminal demo: ls runs normally, the agent answers a question about the project, then asks permission before adding a --help option">
 <div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> ls</div>
 <div>index.js  api.js  package.json</div>
 <div data-cmd><span class="ps">[c+] <b>~/weather-cli</b> $</span> what does this project do?</div>
@@ -144,12 +144,12 @@ footer { margin-top: 80px; border-top: 1px solid var(--rule); }
 
     <h2>SYNOPSIS</h2>
     <div class="sec">
-      <p><b>clam init</b> <b>bash</b> | <b>zsh</b> | <b>pwsh</b><br><b>clam</b> [<b>on</b> | <b>off</b> | <b>reset</b>]<br><b>clam auto</b> [<b>on</b> | <b>off</b>]<br><i>any sentence in plain English</i></p>
+      <p><b>clam init</b> <b>bash</b> | <b>zsh</b> | <b>pwsh</b><br><b>clam</b> [<b>on</b> | <b>off</b> | <b>reset</b>]<br><b>clam auto</b> [<b>on</b> | <b>off</b>]<br><i>any request for the agent</i></p>
     </div>
 
     <h2>DESCRIPTION</h2>
     <div class="sec">
-      <p>An AI assistant for Bash, zsh, PowerShell and Vim, shipped as one static binary for Linux, macOS, Windows and FreeBSD. Commands run as usual. Sentences go to an agent that can read your project. Anything that writes or runs asks first.</p>
+      <p>Puts an AI agent one Enter away in Bash, zsh, PowerShell and Vim, without getting in the way of the shell: commands run exactly as they would without clam, and there is no separate chat window or mode to switch into. Requests go to the agent, which can read your project; anything that writes a file or runs a command asks first. Use the built-in agent with any OpenAI-compatible API, or one you already have: Codex, Claude Code, OpenCode, pi, or any command. One static binary for Linux, macOS, Windows and FreeBSD.</p>
     </div>
 
     <h2>INSTALL</h2>
@@ -167,18 +167,18 @@ $ echo 'eval "$(clam init bash)"' &gt;&gt; ~/.bashrc</pre>
 
     <h2>HOW IT WORKS</h2>
     <div class="sec">
-<pre class="code" role="img" aria-label="A line typed at the prompt goes through the shell hook. Commands run as usual. English goes to the agent, which reads files freely and asks before writing files or running commands.">  you press Enter
+<pre class="code" role="img" aria-label="A line typed at the prompt goes through the shell hook. Commands run as usual. Requests go to the agent, which reads files freely and asks before writing files or running commands.">  you press Enter
         |
    shell hook ---- starts with a command -----&gt; runs as usual
         |                                              ^
-   clam check ---- not English ------------------------'
+   clam check ---- not a request ----------------------'
         |
-     English
+     request
         |
       agent ------ read / list / search files --&gt; answer
         |
    write or run? -- Allow? [y/N] -- y --&gt; action runs</pre>
-      <p class="dim">The check runs locally and gives up after a second, so the prompt never waits on the network. Only English reaches the agent.</p>
+      <p class="dim">The check runs locally and gives up after a second, so the prompt never waits on the network. Commands never reach the agent.</p>
     </div>
   </main>
 

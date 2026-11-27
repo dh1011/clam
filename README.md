@@ -2,7 +2,7 @@
 
 # clam
 
-clam is an AI assistant for your terminal. It answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone. It can inspect local files and, with approval, change files or run commands. Website: [duy.run/clam](https://duy.run/clam)
+clam lets you call an LLM or coding agent straight from your Bash, zsh or PowerShell prompt, without getting in the way of regular shell commands. Type a request and it goes to the agent; type a command and it runs exactly as before. The agent can inspect local files and, with approval, change files or run commands. Website: [duy.run/clam](https://duy.run/clam)
 
 ![clam answering questions and editing a project from a Bash prompt](docs/demo.gif)
 

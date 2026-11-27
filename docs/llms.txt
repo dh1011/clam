@@ -1,6 +1,6 @@
 # clam
 
-> clam answers natural-language requests typed at a Bash, zsh or PowerShell prompt while leaving ordinary commands alone. It uses an agent that can inspect local files and, with the user's approval, change files or run commands. It ships as one static binary for Linux, macOS, Windows and FreeBSD.
+> clam lets you call an LLM or coding agent straight from a Bash, zsh or PowerShell prompt without getting in the way of regular shell commands: requests go to the agent, commands run exactly as before. The agent (built-in, or Codex, Claude Code, OpenCode, pi or any command) can inspect local files and, with the user's approval, change files or run commands. It ships as one static binary for Linux, macOS, Windows and FreeBSD.
 
 ## How it works
 
